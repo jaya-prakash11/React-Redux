@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
+  fetchSelectedProduct,
   removeSelectedProduct,
   selectedProduct,
 } from "../Redux/actions/productActions";
@@ -12,7 +13,8 @@ function ProductDetail() {
   const { productId } = useParams();
 
   useEffect(() => {
-    if (productId && productId !== "") fetchProductDetail();
+    if (productId && productId !== "")
+      dispatch(fetchSelectedProduct(productId));
 
     return () => {
       console.log("when componnet destorys");
@@ -20,16 +22,7 @@ function ProductDetail() {
     };
   }, [productId]);
 
-  async function fetchProductDetail() {
-    let response = await axios
-      .get(`https://fakestoreapi.com/products/${productId}`)
-      .catch((err) => console.log(err));
-
-    dispatch(selectedProduct(response.data));
-  }
-
   const productDetail = useSelector((state) => state.product);
-  console.log("productDetail", productDetail);
 
   return (
     <div className="ui container" style={{ marginTop: "50px" }}>
